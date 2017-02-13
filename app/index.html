@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="index_area">
+<head>
+	<meta charset="UTF-8">
+	<title>Cnode社区</title>
+	<link rel="stylesheet" href="../public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../public/style.css">
+</head>
+<body>
+	<header class="cnode_header"></header>
+	<div class="cnode_content">
+		<div class="cnode_left">
+			<ui-view class="col-xs-12 p0"></ui-view>
+		</div>
+		<div class="cnode_right">
+			<div class="panel panel-default">
+				<div class="panel-heading">Cnode：Nodejs专业中文社区</div>
+				<div class="panel-body">
+					<p>
+						您可以<a href="javascript:;r">登录</a>或<a href="javascript:;">注册</a>,也可以s
+					</p>
+					<button class="btn btn-default">通过GitHub登录</button>
+					<div>
+						<button class="btn btn-default" ui-sref='/topics/index'>进入</button>
+					</div>
+					<div>
+						<button class="btn btn-default" ui-sref='/topics/topicslist'>进入1</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="../public/libs/angular.js"></script>
+<script src="../public/min/angular-resource.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../public/min/jquery-1.9.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../public/min/jquerysession.js" type="text/javascript" charset="utf-8"></script>
+<script src="../public/libs/angular-ui-router.js" type="text/javascript" charset="utf-8"></script>
+<script src="../public/libs/angular-local-storage.js" type="text/javascript" charset="utf-8"></script>
+<script src="../public/app.js"></script>
+
+</html>
