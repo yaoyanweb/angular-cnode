@@ -6,6 +6,7 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
     $scope.params.pape=0;
     $scope.params.tab = 'job';
     $scope.params.limit=10;
+    $scope.content1 = 1212;
     $scope.tablist=[
         {name:'问答',type:'ask'},
         {name:'分享',type:'share'},
@@ -25,6 +26,7 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
 
     $scope.TopicDetail = function(id){
         get(id);
+       
     }
 
     list($scope.params)
@@ -33,14 +35,16 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
             return false;
         }
         TopicsResource.list(obj).then(function(res){
-            $scope.Data = res;
-            console.log($scope.Data)    
+            $scope.Data = res.data.data;
+            console.log(res.data.data,111);
         })
     }
 
     function get(id){
         TopicsResource.get(id).then(function(res){
-            console.log(res);
+
         })
     }
+    
+    
 }

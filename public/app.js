@@ -24,10 +24,13 @@ angular
                 controller: 'TopicslistCtrl'
             })
             .state("/topics/index", {                                                              //订单管理
-                url: "/topics/index",
-                templateUrl: "Topics/Index.html",
+                url: "/topics/index/{name:json}",
+                templateUrl: "Topics/index.html",
+                params:{'name':null},
                 controller: 'indexCtrl'
             })
+
+              
         //去掉#号  
         /*$locationProvider.html5Mode(true);*/
 
@@ -43,10 +46,13 @@ function run($rootScope, $state, $location, localStorageService, PublicResource)
 (function(){
 "use strict"
 angular.module('index_area').controller('indexCtrl', indexCtrl);
-indexCtrl.$inject = ['$state', '$scope','TopicsResource'];
-function indexCtrl($state, $scope,TopicsResource) {
+indexCtrl.$inject = ['$state', '$scope','$stateParams'];
+function indexCtrl($state, $scope,$stateParams) {
+   $scope.name=$stateParams.name;
 
 }
+
+
 })();
 (function(){
 "use strict"
@@ -58,6 +64,7 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
     $scope.params.pape=0;
     $scope.params.tab = 'job';
     $scope.params.limit=10;
+    $scope.content1 = 1212;
     $scope.tablist=[
         {name:'问答',type:'ask'},
         {name:'分享',type:'share'},
@@ -77,6 +84,7 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
 
     $scope.TopicDetail = function(id){
         get(id);
+       
     }
 
     list($scope.params)
@@ -85,24 +93,23 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
             return false;
         }
         TopicsResource.list(obj).then(function(res){
-            $scope.Data = res;
-            console.log($scope.Data)    
+            $scope.Data = res.data.data;
+            console.log(res.data.data,111);
         })
     }
 
     function get(id){
         TopicsResource.get(id).then(function(res){
-            console.log(res);
+
         })
     }
+    
+    
 }
 
 })();
 (function(){
 "use strict"
-/**
- * 提供功能API封装
- */
 angular.module('index_area').factory('TopicsResource', TopicsResource);
 TopicsResource.$inject = ['$http','$resource'];
 function TopicsResource($http,$resource) {
@@ -116,24 +123,56 @@ function TopicsResource($http,$resource) {
      * list
      * 获取订单列表
      */
+    // function list(obj) {
+    //     return $resource('https://cnodejs.org/api/v1/topics').get({
+    //         pape:obj.page,
+    //         tab:obj.tab,
+    //         limit:obj.limit,
+    //         mdrender :false
+    //     }).$promise.then(function(data){
+    //         return data.data;
+    //     })
+    // }
     function list(obj) {
-        return $resource('https://cnodejs.org/api/v1/topics').get({
-            pape:obj.page,
-            tab:obj.tab,
-            limit:obj.limit,
-            mdrender :false
-        }).$promise.then(function(data){
-            return data.data;
-        })
+      return  $http({
+                    url:'https://cnodejs.org/api/v1/topics',
+                    method:'GET',
+                    params:{
+                        pape:obj.page,
+                        tab:obj.tab,
+                        limit:obj.limit,
+                        mdrender :false
+                    }
+                  }).success(function(data){
+
+                    
+                    return data.data;
+
+              })
+
     }
 
+
+    // function get(id){
+    //     return $resource("https://cnodejs.org/api/v1/topic/"+id).get({
+    //         mdrender:false
+    //     })
+    //     .$promise.then(function(data){
+    //         return data.data;
+    //     })
+    // }
     function get(id){
-        return $resource("https://cnodejs.org/api/v1/topic/"+id).get({
-            mdrender:false
-        })
-        .$promise.then(function(data){
-            return data.data;
-        })
+    return  $http({
+              url:'https://cnodejs.org/api/v1/topic/'+id,
+              method:'GET',
+              params:{mdrender:false}
+            }).success(function(data){
+
+              console.log(data.data.content,88888);
+              return data.data;
+
+            })
     }
 }
+
 })();

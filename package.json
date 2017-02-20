@@ -30,6 +30,7 @@
     "gulp-zip": "^3.2.0",
     "jquery": "^3.1.0",
     "jquery-migrate": "^3.0.0",
+    "jquery.cookie": "^1.4.1",
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0",
     "wechat-oauth": "^1.2.0"

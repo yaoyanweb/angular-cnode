@@ -1,3 +1,4 @@
+
 <div class="panel panel-default" ng-controller="TopicslistCtrl">
     <div class="panel-heading overflow ">
         <div class="btn-group col-xs-6 p0">
@@ -16,11 +17,11 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="topic_list" ng-repeat="item in Data" ng-click="TopicDetail(item.id)">
+        <div class="topic_list"  ng-repeat="item in Data" ng-click="TopicDetail(item.content)">
             <div class="list-img">
                 <img ng-src="{{item.author.avatar_url}}" alt="" title='{{item.author.loginname}}'>
             </div>
-            <div class="list-content"><span ng-if="item.top" class="Posts_top">置顶</span><span ng-if="item.good&&!item.top" class="Posts_top">精华</span>{{item.title}}</div>
+           <a href="#"><div class="list-content" ui-sref='/topics/index({name:item})'> <span ng-if="item.top" class="Posts_top">置顶</span><span ng-if="item.good&&!item.top" class="Posts_top">精华</span>{{item.title}}</div></a>
             <span class="list-parms">
                 回复:<i>{{item.reply_count}}</i>/{{item.visit_count}}
             </span>

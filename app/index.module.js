@@ -22,10 +22,13 @@ angular
                 controller: 'TopicslistCtrl'
             })
             .state("/topics/index", {                                                              //订单管理
-                url: "/topics/index",
-                templateUrl: "Topics/Index.html",
+                url: "/topics/index/{name:json}",
+                templateUrl: "Topics/index.html",
+                params:{'name':null},
                 controller: 'indexCtrl'
             })
+
+              
         //去掉#号  
         /*$locationProvider.html5Mode(true);*/
 
