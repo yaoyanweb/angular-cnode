@@ -1,10 +1,9 @@
 (function(){
 "use strict"
 angular
-    .module("index_area", ["ui.router", 'LocalStorageModule','ngResource'])
+    .module("index_area", ["ui.router", 'LocalStorageModule','ngResource','ngSanitize'])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-        $urlRouterProvider.otherwise("/topics/topicslist");
-
+        $urlRouterProvider.otherwise("/topics");
         $httpProvider.defaults.transformRequest = function (obj) {
             var str = [];
             for (var p in obj) {
@@ -16,24 +15,13 @@ angular
         $httpProvider.defaults.headers.post = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-
         $stateProvider
-            .state("/topics/topicslist", {                                                              //订单管理
-                url: "/topics/topicslist",
-                templateUrl: "Topics/topicslist.html",
-                controller: 'TopicslistCtrl'
+            .state("/topics", {                                                             
+                url: "/topics",
+                controller: 'TopicsCtrl'
             })
-            .state("/topics/index", {                                                              //订单管理
-                url: "/topics/index/{name:json}",
-                templateUrl: "Topics/index.html",
-                params:{'name':null},
-                controller: 'indexCtrl'
-            })
-
-              
         //去掉#号  
-        /*$locationProvider.html5Mode(true);*/
-
+        
     })
     .run(run);
 run.$inject = ['$rootScope', '$state', '$location', 'localStorageService']
@@ -45,14 +33,43 @@ function run($rootScope, $state, $location, localStorageService, PublicResource)
 })();
 (function(){
 "use strict"
-angular.module('index_area').controller('indexCtrl', indexCtrl);
-indexCtrl.$inject = ['$state', '$scope','$stateParams'];
-function indexCtrl($state, $scope,$stateParams) {
-   $scope.name=$stateParams.name;
+angular.module('index_area').config(function($stateProvider,$urlRouterProvider){
+    $urlRouterProvider.otherwise("/topics/list");
+    $stateProvider
+        .state("/list", {
+            url: "/topics/list",
+            templateUrl: "Topics/list.html",
+            controller: 'TopicslistCtrl'
+        })
+        .state("/detail", {
+            url: "/topics/detail/{id:string}",
+            templateUrl: "Topics/detail.html",
+            controller: 'TopicsdetailCtrl'
+        })
+}).controller('TopicsCtrl', TopicsCtrl);
+TopicsCtrl.$inject = ['$state', '$scope'];
+function TopicsCtrl($state, $scope) {
 
 }
 
+})();
+(function(){
+"use strict"
+angular.module('index_area').controller('TopicsdetailCtrl', TopicsdetailCtrl);
+TopicsdetailCtrl.$inject = ['$state', '$scope','TopicsResource','$stateParams'];
+function TopicsdetailCtrl($state, $scope,TopicsResource,$stateParams) {
+    $scope.id = $stateParams.id;
+    $scope.data = new Object();
+    get($scope.id)
 
+    //根据id获取文章内容
+    function get(id){
+        TopicsResource.get(id).then(function(res){
+            $scope.data = res;
+            console.log(res)
+        })
+    }
+}
 })();
 (function(){
 "use strict"
@@ -64,7 +81,6 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
     $scope.params.pape=0;
     $scope.params.tab = 'job';
     $scope.params.limit=10;
-    $scope.content1 = 1212;
     $scope.tablist=[
         {name:'问答',type:'ask'},
         {name:'分享',type:'share'},
@@ -84,7 +100,6 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
 
     $scope.TopicDetail = function(id){
         get(id);
-       
     }
 
     list($scope.params)
@@ -93,23 +108,24 @@ function TopicslistCtrl($state, $scope,TopicsResource) {
             return false;
         }
         TopicsResource.list(obj).then(function(res){
-            $scope.Data = res.data.data;
-            console.log(res.data.data,111);
+            $scope.Data = res;
+            console.log($scope.Data)    
         })
     }
 
     function get(id){
         TopicsResource.get(id).then(function(res){
-
+            console.log(res);
         })
     }
-    
-    
 }
 
 })();
 (function(){
 "use strict"
+/**
+ * 提供功能API封装
+ */
 angular.module('index_area').factory('TopicsResource', TopicsResource);
 TopicsResource.$inject = ['$http','$resource'];
 function TopicsResource($http,$resource) {
@@ -123,56 +139,24 @@ function TopicsResource($http,$resource) {
      * list
      * 获取订单列表
      */
-    // function list(obj) {
-    //     return $resource('https://cnodejs.org/api/v1/topics').get({
-    //         pape:obj.page,
-    //         tab:obj.tab,
-    //         limit:obj.limit,
-    //         mdrender :false
-    //     }).$promise.then(function(data){
-    //         return data.data;
-    //     })
-    // }
     function list(obj) {
-      return  $http({
-                    url:'https://cnodejs.org/api/v1/topics',
-                    method:'GET',
-                    params:{
-                        pape:obj.page,
-                        tab:obj.tab,
-                        limit:obj.limit,
-                        mdrender :false
-                    }
-                  }).success(function(data){
-
-                    
-                    return data.data;
-
-              })
-
+        return $resource('https://cnodejs.org/api/v1/topics').get({
+            pape:obj.page,
+            tab:obj.tab,
+            limit:obj.limit,
+            mdrender :false
+        }).$promise.then(function(data){
+            return data.data;
+        })
     }
 
-
-    // function get(id){
-    //     return $resource("https://cnodejs.org/api/v1/topic/"+id).get({
-    //         mdrender:false
-    //     })
-    //     .$promise.then(function(data){
-    //         return data.data;
-    //     })
-    // }
     function get(id){
-    return  $http({
-              url:'https://cnodejs.org/api/v1/topic/'+id,
-              method:'GET',
-              params:{mdrender:false}
-            }).success(function(data){
-
-              console.log(data.data.content,88888);
-              return data.data;
-
-            })
+        return $resource("https://cnodejs.org/api/v1/topic/"+id).get({
+            mdrender:true
+        })
+        .$promise.then(function(data){
+            return data.data;
+        })
     }
 }
-
 })();

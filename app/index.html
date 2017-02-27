@@ -7,7 +7,9 @@
 	<link rel="stylesheet" href="../public/style.css">
 </head>
 <body>
-	<header class="cnode_header"></header>
+	<header class="cnode_header">
+		
+	</header>
 	<div class="cnode_content">
 		<div class="cnode_left">
 			<ui-view class="col-xs-12 p0"></ui-view>
@@ -20,9 +22,7 @@
 						您可以<a href="javascript:;r">登录</a>或<a href="javascript:;">注册</a>,也可以s
 					</p>
 					<button class="btn btn-default">通过GitHub登录</button>
-					<div>
-						<div class="btn btn-default" ui-sref='/topics/index'>进入</div>
-					</div>
+					
 					<div>
 						<button class="btn btn-default" ui-sref='/topics/topicslist'>进入1</button>
 					</div>
@@ -32,11 +32,13 @@
 	</div>
 </body>
 <script src="../public/libs/angular.js"></script>
+<script src="http://apps.bdimg.com/libs/angular.js/1.5.0-beta.0/angular-sanitize.min.js"></script>
 <script src="../public/min/angular-resource.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../public/min/jquery-1.9.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../public/min/jquerysession.js" type="text/javascript" charset="utf-8"></script>
 <script src="../public/libs/angular-ui-router.js" type="text/javascript" charset="utf-8"></script>
 <script src="../public/libs/angular-local-storage.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://cdn.bootcss.com/angular-sanitize/1.5.0/angular-sanitize.min.js"></script>
 <script src="../public/app.js"></script>
 
 </html>

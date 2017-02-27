@@ -29,7 +29,7 @@ gulp.task('default', ['concat', "css"], function () {
 })
 
 //node本地服务
-gulp.task('nodemon',function(){
+gulp.task('run',function(){
 	nodemon({
 		script:'index.js',
 	})

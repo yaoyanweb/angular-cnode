@@ -33,6 +33,18 @@
   vertical-align: text-top;
 }
 
+#detail .detail-title {
+  font-size: 12px;
+}
+#detail .detail-title span {
+  margin-left: -4px;
+}
+#detail .detail-title p {
+  font-size: 20px;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
 .topic_list:last-child {
   border-bottom: 1px solid #ddd;
 }

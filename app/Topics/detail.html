@@ -1,0 +1,13 @@
+<div class="panel panel-default" id="detail">
+    <div class="panel-heading detail-title">
+        <p class="list-content"><span ng-if="data.top" class="Posts_top">置顶</span><span ng-if="data.good&&!data.top" class="Posts_top">精华</span>{{data.title}}</p>
+        <div>
+            作者:{{data.author.loginname}}&nbsp;&nbsp;{{data.visit_count}}次浏览&nbsp;&nbsp;来自:
+            <span ng-if="data.tab=='ask'">问答</span>
+            <span ng-if="data.tab=='share'">分享</span>
+            <span ng-if="data.tab=='job'">招聘</span>
+            <span ng-if="data.tab=='good'">精华</span>
+        </div>
+    </div>
+    <div class="panel-body detail-body" ng-bind-html="data.content"></div>
+</div>
